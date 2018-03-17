@@ -1,5 +1,7 @@
 import java.awt.*;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Kenan on 3/13/2018.
@@ -24,17 +26,23 @@ public class Player extends GameObject {
         checkCollision();
     }
 
-    public void checkCollision(){
-        ListIterator<GameObject> iterate = handler.objects.listIterator();
+    public synchronized void checkCollision(){
+        List<GameObject> list = new LinkedList<>();
+        Iterator<GameObject> iterate = handler.objects.iterator();
         while(iterate.hasNext()){
             GameObject temp = iterate.next();
             if(temp.id == ID.Enemy){
                 if (getBounds().intersects(temp.getBounds())){
-                    iterate.remove();
+                    list.add(temp);
                 }
             }
         }
+
+        for(GameObject object : list) {
+            handler.removeObject(object);
+        }
     }
+
     public void render(Graphics g) {
         g.setColor(Color.CYAN);
         g.fillRect(x,y,width,height);

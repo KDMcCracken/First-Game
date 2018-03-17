@@ -1,11 +1,13 @@
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Kenan on 3/13/2018.
  */
 public class Handler {
-    LinkedList<GameObject> objects= new LinkedList<>();
+    List<GameObject> objects = new CopyOnWriteArrayList<>();
+    private final Object lockObject = new Object();
 
     public void tick(){
         //Ticks every objects 'tick' method
@@ -22,10 +24,14 @@ public class Handler {
     }
 
     public void addObject(GameObject object){
-        this.objects.add(object);
+        synchronized (this.lockObject) {
+            this.objects.add(object);
+        }
     }
 
     public void removeObject(GameObject object){
-        this.objects.remove(object);
+        synchronized (this.lockObject) {
+            this.objects.remove(object);
+        }
     }
 }
