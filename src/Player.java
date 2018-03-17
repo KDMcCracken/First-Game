@@ -26,7 +26,7 @@ public class Player extends GameObject {
         checkCollision();
     }
 
-    public synchronized void checkCollision(){
+    public void checkCollision(){
         List<GameObject> list = new LinkedList<>();
         Iterator<GameObject> iterate = handler.objects.iterator();
         while(iterate.hasNext()){
